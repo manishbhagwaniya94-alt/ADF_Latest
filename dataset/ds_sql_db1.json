@@ -5,6 +5,17 @@
 			"referenceName": "ls_sql_db",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"Schema_name": {
+				"type": "string"
+			},
+			"Table_name": {
+				"type": "string"
+			},
+			"cdc_col": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"schema": [],
