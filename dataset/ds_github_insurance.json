@@ -1,0 +1,22 @@
+{
+	"name": "ds_github_insurance",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_github_https",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "manishbhagwaniya94-alt/Insurance-Data/refs/heads/main/insurance%20Data.csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
