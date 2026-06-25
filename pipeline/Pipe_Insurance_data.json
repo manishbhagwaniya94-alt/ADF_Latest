@@ -79,16 +79,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "dataflow1",
-						"type": "DataFlowReference",
-						"parameters": {
-							"parameter1": {
-								"value": "'@{activity('Source_To_Bronze').output}'",
-								"type": "Expression"
-							}
-						}
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
@@ -116,16 +106,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "dataflow1",
-						"type": "DataFlowReference",
-						"parameters": {
-							"parameter1": {
-								"value": "'@{activity('Source_To_Bronze').output}'",
-								"type": "Expression"
-							}
-						}
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
