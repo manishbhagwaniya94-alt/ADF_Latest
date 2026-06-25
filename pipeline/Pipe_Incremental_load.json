@@ -1,5 +1,5 @@
 {
-	"name": "Incremental_load",
+	"name": "Pipe_Incremental_load",
 	"properties": {
 		"activities": [
 			{
@@ -37,7 +37,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_sql_db",
+						"referenceName": "ds_sql_db1",
 						"type": "DatasetReference"
 					}
 				],
