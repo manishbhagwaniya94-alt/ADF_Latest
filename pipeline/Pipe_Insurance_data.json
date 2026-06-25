@@ -27,6 +27,9 @@
 					},
 					"sink": {
 						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
 							"quoteAllText": true,
@@ -51,7 +54,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_github_insurance",
+						"referenceName": "healthcare_data",
 						"type": "DatasetReference"
 					}
 				]
@@ -62,6 +65,43 @@
 				"dependsOn": [
 					{
 						"activity": "Source_To_Bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow1",
+						"type": "DataFlowReference",
+						"parameters": {
+							"parameter1": {
+								"value": "'@{activity('Source_To_Bronze').output}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Silver_to_gold",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Bronze_to_silver",
 						"dependencyConditions": [
 							"Succeeded"
 						]

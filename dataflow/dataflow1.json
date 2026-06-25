@@ -3,13 +3,63 @@
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
-			"sinks": [],
-			"transformations": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "healthcare_data",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_github_insurance",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
 			"scriptLines": [
 				"parameters{",
-				"     parameter1 as string",
-				"}"
+				"     parameter1 as string (sum({Billing Amount}))",
+				"}",
+				"source(output(",
+				"          Name as string,",
+				"          Age as string,",
+				"          Gender as string,",
+				"          {Blood Type} as string,",
+				"          {Medical Condition} as string,",
+				"          {Date of Admission} as string,",
+				"          Doctor as string,",
+				"          Hospital as string,",
+				"          {Insurance Provider} as string,",
+				"          {Billing Amount} as string,",
+				"          {Room Number} as string,",
+				"          {Admission Type} as string,",
+				"          {Discharge Date} as string,",
+				"          Medication as string,",
+				"          {Test Results} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: true,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 select(skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 aggregate(groupBy(Age)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
