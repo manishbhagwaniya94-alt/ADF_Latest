@@ -7,7 +7,9 @@
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
-				""
+				"parameters{",
+				"     parameter1 as string",
+				"}"
 			]
 		}
 	}
