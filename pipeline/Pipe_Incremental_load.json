@@ -7,7 +7,20 @@
 				"type": "Copy",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "last_cdc",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Current",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -20,16 +33,20 @@
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "@select*from @{pipeline().parameters.schema_name}.@{pipeline().parameters.table_name} where @{pipeline().parameters.cdc_col}>'1900-01-01'",
+							"value": "@select*from @{pipeline().parameters.schema_name}.@{pipeline().parameters.table_name} where @{pipeline().parameters.cdc_col}>'@{activity('cdc_col').output.value[0].cdc_col}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "SqlServerSink",
-						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -49,8 +66,18 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_sql_db",
-						"type": "DatasetReference"
+						"referenceName": "parquet_dynamic_latest",
+						"type": "DatasetReference",
+						"parameters": {
+							"folder": {
+								"value": " @concat(pipeline().parameters.table_name,'_',variables('current'))",
+								"type": "Expression"
+							},
+							"file": {
+								"value": "@concat(pipeline().parameters.table_name,'_',variables('current'))",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},
@@ -92,6 +119,23 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "Current",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Current",
+					"value": {
+						"value": "@utcNow()",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -103,6 +147,11 @@
 			},
 			"cdc_col": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"Current": {
+				"type": "String"
 			}
 		},
 		"annotations": []
