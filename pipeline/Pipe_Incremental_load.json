@@ -110,7 +110,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"Container": {
-								"value": "Bronze",
+								"value": "bronze",
 								"type": "Expression"
 							},
 							"folder": "cdc",
